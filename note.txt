@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS profiles (
+   id INT (10) NOT NULL AUTO_INCREMENT,
+   cod VARCHAR (50) NULL,
+   nme VARCHAR (100) NULL,
+   hsb VARCHAR (100) NULL,
+   mds TEXT NULL,
+   msk TEXT NULL,
+   ssb TEXT NULL,
+   sci VARCHAR (100) NULL,
+   sct VARCHAR (100) NULL,
+   scd VARCHAR (100) NULL,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (ID)
+);
+
+INSERT INTO profiles (cod, nme, hsb, mds, msk, ssb, sci, sct, scd) VALUES 
+('1dGV4dCBkdW', 'jhonny', 'backend developer|ui / ux designer|3d floorplanner', 'Hello, introduce me a graduate of the Informatics Engineering study program. I am interested in design, 3D modeling, web frontend programming and also hardware. I have some experience in that field. I hope I can contribute to your company soon. Thanks :)', '1-skill 1|1-skill 2|1-skill 3|1-skill 4|0-skill 5|1-skill 6', 'lorem ipsum dolor sit amet bajigur goreng krispi', 'fas fa-code|fab fa-figma|fas fa-cube', 'backend developer|ui / ux designer|3d floorplanner', 'lorem ipsum dolor sit amet bajigur goreng krispi 1|lorem ipsum dolor sit amet bajigur goreng krispi 2|lorem ipsum dolor sit amet bajigur goreng krispi 3');

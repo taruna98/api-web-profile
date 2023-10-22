@@ -22,6 +22,8 @@ $router->get('profile/{id}', 'ProfileController@index');
 
 // portfolio
 $router->get('portfolio/{id}', 'PortfolioController@index');
+$router->get('portfolio/detail/{id}', 'PortfolioController@detail');
 
 // article
 $router->get('article/{id}', 'ArticleController@index');
+$router->get('article/detail/{id}', 'ArticleController@detail');
