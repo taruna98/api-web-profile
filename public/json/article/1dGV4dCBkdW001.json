@@ -3,7 +3,7 @@
   "nme":"jhonny",
   "ttl":"title 1",
   "ctg":"music",
-  "dsc":"lorem ipsum dolir sut amot bajigur goreng krispi testing mini description tiga tulisan dan gambar campur disini bisa panjang banget",
+  "dsc":"<h2 style='text-align: center;'>judul misalnya</h2><iframe width='560' height='315' src='https://www.youtube.com/embed/ZJeN80b5ma4?si=WychtEfzXnLwIBFB' frameborder='0' allowfullscreen style='display: block; margin: 0 auto;'></iframe><p>lorem ipsum dolir sut amot bajigur goreng krispi testing mini description tiga tulisan dan gambar campur disini bisa panjang banget. uler melingker lingker diatas pager bunyinya ser, lorem ipsum dolir sut amot bajigur goreng krispi testing mini description tiga tulisan dan gambar campur disini bisa panjang banget. lorem ipsum dolir sut amot bajigur goreng krispi testing mini description tiga tulisan dan gambar campur disini bisa panjang banget. lorem ipsum dolir sut amot bajigur goreng krispi testing mini description tiga tulisan dan gambar campur disini bisa panjang banget.</p>",
   "cat":"2023-09-14 12:00:00",
   "uat":"2023-09-15 12:00:00"
 }
