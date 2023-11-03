@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function index($id)
     {
         $profile = DB::table('profiles')
-            ->select('id', 'cod', 'nme', 'hsb', 'mds', 'msk', 'ssb', 'sci', 'sct', 'scd', 'created_at', 'updated_at')
+            ->select('id', 'cod', 'nme', 'hsb', 'mds', 'msk', 'mtl', 'ssb', 'sci', 'sct', 'scd', 'created_at', 'updated_at')
             ->where('cod', $id)
             ->first();
 
