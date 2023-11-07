@@ -11,7 +11,7 @@ class ProfileController extends Controller
     {
         //
     }
-    
+
     public function index($id)
     {
         $profile = DB::table('profiles')
@@ -31,7 +31,6 @@ class ProfileController extends Controller
             if (strpos($decodedDataPor['id'], $profile->cod) !== false) {
                 $dataPor['id']  = $decodedDataPor['id'];
                 $dataPor['ttl'] = $decodedDataPor['ttl'];
-                $dataPor['hbg'] = $decodedDataPor['hbg'];
                 $dataPor['ctg'] = $decodedDataPor['ctg'];
                 $dataPor['cat'] = $decodedDataPor['cat'];
                 $portfolio[]    = $dataPor;
@@ -62,8 +61,7 @@ class ProfileController extends Controller
             'portfolio' => $portfolio,
             'article'   => $article
         ];
-        
+
         return response($dataload, 200);
     }
-
 }
