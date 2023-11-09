@@ -1,15 +1,13 @@
 {
   "id":"1dGV4dCBkdW002",
-  "nme":"jhonny",
-  "ttl":"title 2",
-  "hbg":"bg_1",
+  "nme":"tarunsky",
+  "ttl":"leaderboard",
   "ctg":"coding",
-  "cln":"xavier",
-  "cby":"jason",
-  "lnk":"www.test.com",
-  "img":"img_1|img_2|img_3",
-  "sbt":"title 1|title 2|title 3",
-  "dsc":"lorem ipsum dolir sut amot|bajigur goreng krispi|testing mini description tiga",
-  "cat":"2023-09-12 12:00:00",
-  "uat":"2023-09-15 12:00:00"
+  "cln":"company",
+  "cby":"tarunsky",
+  "lnk":"https://kikorun.mncgames.com/leaderboard/run/",
+  "sbt":"leaderboard kiko run old|leaderboard kiko run competition 2023|leaderboard kiko run 3 mode",
+  "dsc":"displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila|displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila with highlight feature|displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila with highlight and can change 3 mode different",
+  "cat":"2023-11-09 21:10:30",
+  "uat":"2023-11-09 21:39:35"
 }
