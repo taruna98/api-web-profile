@@ -1,15 +1,13 @@
 {
   "id":"1dGV4dCBkdW003",
-  "nme":"jhonny",
-  "ttl":"title 3",
-  "hbg":"bg_1",
-  "ctg":"3d floorplan",
-  "cln":"xavier",
-  "cby":"jason",
-  "lnk":"www.test.com",
-  "img":"img_1|img_2|img_3",
-  "sbt":"title 1|title 2|title 3",
-  "dsc":"lorem ipsum dolir sut amot|bajigur goreng krispi|testing mini description tiga",
-  "cat":"2023-09-12 12:00:00",
-  "uat":"2023-09-15 12:00:00"
+  "nme":"tarunsky",
+  "ttl":"landing page kiko run",
+  "ctg":"coding",
+  "cln":"company",
+  "cby":"tarunsky",
+  "lnk":"https://kikorun.mncgames.com/",
+  "sbt":"landing page kiko run section event|landing page kiko run section leaderboard|landing page kiko run section download",
+  "dsc":"show content in event 'piala presiden 2023'|show up top 3 leaderboard in game in 3 mode|show game product from MNC games and get download by click button",
+  "cat":"2023-11-10 21:40:10",
+  "uat":"2023-11-10 21:50:20"
 }
