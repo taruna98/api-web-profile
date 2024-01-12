@@ -18,6 +18,10 @@ class ProfileController extends Controller
             ->select('id', 'cod', 'nme', 'hsb', 'mds', 'msk', 'mtl', 'ssb', 'sci', 'sct', 'scd', 'created_at', 'updated_at')
             ->where('cod', $id)
             ->first();
+            
+        if ($profile == null) {
+            return response([], 200);
+        }
 
         // get data portfolio from json file
         $folderPathPor = realpath(__DIR__ . '/../../../') . '\public\json\portfolio';
