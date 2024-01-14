@@ -17,6 +17,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// auth
+$router->post('login', 'AuthController@login');
+$router->post('register', 'AuthController@register');
+$router->post('change_password', 'AuthController@change_password');
+
 // profile
 $router->get('profile/{id}', 'ProfileController@index');
 
