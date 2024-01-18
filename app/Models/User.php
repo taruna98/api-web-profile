@@ -21,7 +21,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'eml', // email
         'pas', // password
         'sta', // status 
-        'sig', // token 
+        'tok', // token 
         'created_at',
         'updated_at'
     ];
