@@ -62,9 +62,7 @@ class AuthController extends Controller
 
         $user = User::where('eml', $email)->first();
 
-        // return Hash::make($password);
-
-        if (Hash::check($password, $user->pas)) {
+        if ($user && Hash::check($password, $user->pas)) {
             $apiToken = bin2hex(random_bytes(20));
 
             $user->update([
