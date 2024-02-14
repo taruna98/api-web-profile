@@ -12,14 +12,15 @@ class Profile extends Model
     
     protected $fillable = [
         'cod', // code
-        'nme', // name
         'hsb', // head_subtitle 
         'mds', // me_desc 
         'msk', // me_skills 
+        'mtl', // me_tools 
         'ssb', // srv_subtitle 
         'sci', // srv_crd_icon 
         'sct', // srv_crd_title 
         'scd', // srv_crd_desc 
+        'stt', // status 
         'created_at',
         'updated_at'
     ];
