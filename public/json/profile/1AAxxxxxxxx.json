@@ -1,0 +1,91 @@
+{
+    "profile": {
+        "id": 1,
+        "cod": "1AAxxxxxxxx",
+	"eml": "userbaru@gmail.com",
+	"nme": "user baru",
+        "hsb": "web developer|ui / ux|3d floorplanner",
+        "mds": "Hello, introduce me a graduate of the Informatics Engineering study program. I am interested in design, 3D modeling, web frontend programming and also hardware. I have some experience in that field. I hope I can contribute to your company soon. Thanks :)",
+        "msk": "HTML & CSS|PHP|Javascript|UI / UX|3D Floorplan|Comp Hardware|Teamwork|Communication",
+        "mtl": "VS Code|Putty|Filezilla|Git Bash|Figma|Blender 3D",
+        "ssb": "In our portfolio website, we showcase our services that cater to your needs and exceed your expectations",
+        "sci": "fas fa-code|fab fa-figma|fas fa-cube",
+        "sct": "backend dev|ui / ux|3d floorplanner",
+        "scd": "I have approximately 3 years of experience as a backend developer, responsible for managing APIs related to game clients within the game division of a company.|I have around 2 years of experience as a freelance UI/UX designer, tasked with creating user interfaces for applications with reasonably good functionality using Figma.|I have been experienced as a 3D floorplanner freelancer on a freelance platform, with a relatively good user review and a high level of satisfaction with the results since mid-2020.",
+        "created_at": "2023-09-16 08:16:33",
+        "updated_at": "2024-01-16 21:43:17"
+    },
+    "portfolio": [
+        {
+            "id": "001",
+            "ttl": "backadmin",
+            "ctg": "coding",
+            "cln": "company",
+            "lnk": "https://backadmin.mncgames.com/",
+            "sbt": "page home|page game dashboard",
+            "dsc": "displaying games managed using this CMS|displaying statistics of the managed games",
+            "cat": "2023-11-07 21:30:00",
+            "uat": "2023-11-07 21:35:00"
+        },
+        {
+            "id": "002",
+            "ttl": "leaderboard",
+            "ctg": "coding",
+            "cln": "company",
+            "lnk": "https://kikorun.mncgames.com/leaderboard/run/",
+            "sbt": "leaderboard kiko run old|leaderboard kiko run competition 2023|leaderboard kiko run 3 mode",
+            "dsc": "displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila|displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila with highlight feature|displaying leaderboard from Kiko Run old style using PHP, HTML and CSS vanila with highlight and can change 3 mode different",
+            "cat": "2023-11-09 21:10:30",
+            "uat": "2023-11-09 21:39:35"
+        },
+        {
+            "id": "003",
+            "ttl": "landing page kiko run",
+            "ctg": "coding",
+            "cln": "company",
+            "lnk": "https://kikorun.mncgames.com/",
+            "sbt": "landing page kiko run section event|landing page kiko run section leaderboard|landing page kiko run section download",
+            "dsc": "show content in event 'piala presiden 2023'|show up top 3 leaderboard in game in 3 mode|show game product from MNC games and get download by click button",
+            "cat": "2023-11-10 21:40:10",
+            "uat": "2023-11-10 21:50:20"
+        },
+        {
+            "id": "004",
+            "ttl": "form register",
+            "ctg": "coding",
+            "cln": "company",
+            "lnk": "https://kikorun.mncgames.com/competition/register/",
+            "sbt": "form register competition kiko run|feature dropdown select by search in form|show pop up QR code to get in competition",
+            "dsc": "show form and feature in this form competition kiko run|show few feature in this form|show QR code by pop up in web using bootstrap 5",
+            "cat": "2023-11-10 22:10:50",
+            "uat": "2023-11-10 22:30:20"
+        }
+    ],
+    "article": [
+        {
+            "id": "001",
+            "ttl": "change of basic tone, overtone? or modulation?",
+            "ctg": "music",
+            "dsc": "<p>In the change of the basic tone, many of us commonly refer to it as <i>overtune</i>, while behind this term, there is a different explanation and actual meaning in the world of music. Here is the explanation.</p><p>This time, let's discuss a bit about <i>overtune</i>. In the music world, an <i>overtune</i> is the opening or special introduction in a musical work. Serving as a gateway, it prepares the listener emotionally by introducing main motifs, themes, or musical characteristics that will be heard throughout the piece. Although initially associated with opera and classical music, the concept of <i>overtune</i> has evolved and been adopted in various music genres, offering a deeper and more satisfying listening experience.</p><p>On the other hand, with modulation, modulation in the music world is a technique that involves changing the key or tonality in a musical composition. The key is a set of notes that form the basis of a song, and modulation refers to the subtle or dramatic shift from one key to another. This technique provides rich nuances and variations in music, creating emotional or dramatic changes that enrich the listener's experience. Modulation can be used to create tension, build excitement, or convey deep emotional changes in a musical composition, making it an essential element in the art of music.</p><p>Additionally, I gained this understanding from a video snippet uploaded by the VokalPlus channel, explained by Mr. Indra Aziz as shown below.</p><div class='responsive-iframe-container'><iframe src='https://www.youtube.com/embed/hR-3hwV9tQA?si=x95xyK2irl5EPWK3' frameborder='0' allowfullscreen></iframe></div><p>So, what do you think? Is the correct term for the change of the basic tone <i>overtune</i> or <i>modulation</i>? Now that we know the meanings of these two terms, which are far different from what we initially understood, I hope this article is helpful. Happy reading :)</p>",
+            "cat": "2023-11-14 21:10:20",
+            "uat": "2023-11-14 21:40:15"
+        },
+        {
+            "id": "002",
+            "ttl": "samsung S24R350FZE",
+            "ctg": "technology",
+            "dsc": "<p>This is a monitor in the <i>entry-level</i> class, equipped with common features found in many other <i>entry-level</i> monitors of different brands or series. Among its features are an <b>IPS panel</b>, a <b>24-inch</b> display with a <b>FHD 1920 x 1080</b> resolution, and a <b>75Hz</b> refresh rate. This monitor was released in <b>2019</b>. Below, I also provide the best settings for this monitor as follows:</p><ul><li>bright = custom</li><li>brightness = 81</li><li>contrast = 75</li><li>eye saver mode = off</li><li>eco saving plus = off</li><li>gamma = gamma 1</li><li>color tone = custom</li><li>red = 44</li><li>green = 42</li><li>blue = 45</li></ul><p>Model code = LS24R350<b>FZEXXD</b></p><p>Model = S24R350<b>FZE</b></p><p>With the above settings, this monitor will deliver its best display. From the specifications and setup tips I shared above, and the rest of the information, I obtained from a video uploaded and discussed by the <b>GTID YouTube channel</b>. Here's a snippet:</p><div class='responsive-iframe-container'><iframe src='https://www.youtube.com/embed/Cp2Ln7qQ5Og?si=rHlxEtU-cQS09M6S' frameborder='0' allowfullscreen></iframe></div><p>I hope this article is helpful, and thank you for stopping by. Have a nice day :)</p>",
+            "dscs": "",
+            "cat": "2023-11-16 21:24:44",
+            "uat": "2023-11-16 21:46:23"
+        },
+        {
+            "id": "003",
+            "ttl": "free hosting is available here",
+            "ctg": "technology",
+            "dsc": "<p><b>Infinityfree</b> is one of the hosting services that provides free accounts for users, including a free domain name and database. Not only that, <b>Infinityfree</b> also offers <i>SMTP</i> feature in its free service. From my experience, at the end of <b>2021</b>, I created an account for <b>0 rupiah</b>, meaning it was free, which I used to host a project form that also utilized the <i>SMTP</i> feature, and it ran smoothly.</p><p>After leaving the project at the end of <b>2021</b>, a few days ago, I remembered this project. When I tried to access it, it turned out to still be usable, although I didn't check the <i>SMTP</i> feature in-depth. This means that the <b>free account usage period</b> on this hosting service seems to be <b>very long</b>.</p><img class=\"w-100\" src=\"https://forum-cdn.infinityfree.net/original/3X/8/e/8eef63ff05a4bf2e41481e0c6c1afea9559aa5d8.jpeg\" alt=\"Infinityfree\"><p>In this article, I might want to recommend this hosting service for you free enthusiasts. It's also suitable for those who want to learn about hosting and more because I am still learning myself. Below, I have included the link to Infinityfree, <a href=\"https://www.infinityfree.com/\" target=\"_blank\">click here</a>. Thank you for visiting, and I hope this article is useful. Have a nice day :)</p>",
+            "cat": "2023-11-16 21:40:50",
+            "uat": "2023-11-16 22:10:42"
+        }
+    ]
+}

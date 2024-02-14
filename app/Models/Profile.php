@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
+    protected $connection = 'mysql';
+
     protected $table = 'profiles';
     
     protected $guarded = ['id'];
