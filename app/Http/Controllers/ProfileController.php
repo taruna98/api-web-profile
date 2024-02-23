@@ -16,12 +16,12 @@ class ProfileController extends Controller
     {
         // get profile
         $profile = DB::table('profiles')
-        ->where('cod', $id)
-        ->first();
+            ->where('cod', $id)
+            ->first();
         if ($profile == null) {
             return response([], 200);
         }
-        
+
         // get user
         $user = DB::connection('mysql2')->table('users')->where('email', $profile->eml)->first();
         if ($user == null) {
@@ -55,13 +55,13 @@ class ProfileController extends Controller
     }
 
     public function portfolio_detail($id)
-    {        
+    {
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
-        
+
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
-        
+
         foreach ($jsonFiles as $jsonFile) {
             $jsonData = file_get_contents($jsonFile);
             $decodedData = json_decode($jsonData, true);
@@ -77,15 +77,15 @@ class ProfileController extends Controller
             return response([], 200);
         }
     }
-    
+
     public function article_detail($id)
-    {        
+    {
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
-        
+
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
-        
+
         foreach ($jsonFiles as $jsonFile) {
             $jsonData = file_get_contents($jsonFile);
             $decodedData = json_decode($jsonData, true);
