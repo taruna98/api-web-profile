@@ -1,0 +1,20 @@
+{
+            "profile": {
+                "id": 2,
+                "cod": "3RNdopgmyhs",
+                "eml": "userbaru5@gmail.com",
+                "nme": "user baru 5",
+                "hsb": "dummy header",
+                "mds": "Hello, let's fill your description",
+                "msk": "FIRST SKILL|SECOND SKILL|THIRD SKILL",
+                "mtl": "First Tool|Second Tool|Third Tool",
+                "ssb": "This is my service",
+                "sci": "fas fa-cube|fab fa-cube|fas fa-cube",
+                "sct": "first profession|second profession|third profession",
+                "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
+                "created_at": "2024-02-24 12:11:35",
+                "updated_at": "2024-02-24 12:11:35"
+            },
+            "portfolio": [],
+            "article": []
+        }

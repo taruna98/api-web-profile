@@ -54,6 +54,63 @@ class ProfileController extends Controller
         return response($dataload, 200);
     }
 
+    public function store($id)
+    {
+        // get profile
+        $profile = DB::table('profiles')
+            ->where('cod', $id)
+            ->first();
+        if ($profile == null) {
+            return response([], 200);
+        }
+
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '\public\json\profile';
+        $file_name = $id . '.json';
+        $file_path = $folderPathPro . DIRECTORY_SEPARATOR . $file_name;
+
+        // check file json from folder profile
+        if (file_exists($file_path) && is_file($file_path)) {
+            return response('file already exist', 403);
+        }
+
+        // defined variable
+        $file_id    = $profile->id;
+        $code       = $id;
+        $email      = $profile->eml;
+        $name       = $profile->nme;
+        $time_now   = date('Y-m-d H:i:s');
+
+        // data for file json
+        $data = '{
+            "profile": {
+                "id": ' . $file_id . ',
+                "cod": "' . $code . '",
+                "eml": "' . $email . '",
+                "nme": "' . $name . '",
+                "hsb": "dummy header",
+                "mds": "Hello, let\'s fill your description",
+                "msk": "FIRST SKILL|SECOND SKILL|THIRD SKILL",
+                "mtl": "First Tool|Second Tool|Third Tool",
+                "ssb": "This is my service",
+                "sci": "fas fa-cube|fab fa-cube|fas fa-cube",
+                "sct": "first profession|second profession|third profession",
+                "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
+                "created_at": "' . $time_now . '",
+                "updated_at": "' . $time_now . '"
+            },
+            "portfolio": [],
+            "article": []
+        }';
+
+        $create_json = file_put_contents($file_path, $data);
+
+        if (!$create_json) {
+            return response('failed create file', 403);
+        }
+
+        return response('success create file', 200);
+    }
+
     public function portfolio_detail($id)
     {
         // get data from json file
