@@ -1,18 +1,113 @@
-CREATE TABLE IF NOT EXISTS profiles (
-   id INT (10) NOT NULL AUTO_INCREMENT,
-   cod VARCHAR (50) NULL,
-   nme VARCHAR (100) NULL,
-   hsb VARCHAR (100) NULL,
-   mds TEXT NULL,
-   msk TEXT NULL,
-   ssb TEXT NULL,
-   sci VARCHAR (100) NULL,
-   sct VARCHAR (100) NULL,
-   scd VARCHAR (100) NULL,
-   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-   PRIMARY KEY (ID)
-);
+this is my api project for manage web profile, here i attach my env file and my query.
 
-INSERT INTO profiles (cod, nme, hsb, mds, msk, ssb, sci, sct, scd) VALUES 
-('1dGV4dCBkdW', 'jhonny', 'backend developer|ui / ux designer|3d floorplanner', 'Hello, introduce me a graduate of the Informatics Engineering study program. I am interested in design, 3D modeling, web frontend programming and also hardware. I have some experience in that field. I hope I can contribute to your company soon. Thanks :)', '1-skill 1|1-skill 2|1-skill 3|1-skill 4|0-skill 5|1-skill 6', 'lorem ipsum dolor sit amet bajigur goreng krispi', 'fas fa-code|fab fa-figma|fas fa-cube', 'backend developer|ui / ux designer|3d floorplanner', 'lorem ipsum dolor sit amet bajigur goreng krispi 1|lorem ipsum dolor sit amet bajigur goreng krispi 2|lorem ipsum dolor sit amet bajigur goreng krispi 3');
+MYSQL QUERY FROM DATABASE api_web_v1
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Feb 24, 2024 at 01:49 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.27
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `api_web_v1`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profiles`
+--
+
+CREATE TABLE `profiles` (
+  `id` int(10) NOT NULL,
+  `cod` varchar(50) DEFAULT NULL,
+  `eml` varchar(100) DEFAULT NULL,
+  `nme` varchar(100) DEFAULT NULL,
+  `hsb` varchar(100) DEFAULT NULL,
+  `mds` text DEFAULT NULL,
+  `msk` text DEFAULT NULL,
+  `mtl` text DEFAULT NULL,
+  `ssb` text DEFAULT NULL,
+  `sci` varchar(100) DEFAULT NULL,
+  `sct` varchar(100) DEFAULT NULL,
+  `scd` text DEFAULT NULL,
+  `stt` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `profiles`
+--
+
+INSERT INTO `profiles` (`id`, `cod`, `eml`, `nme`, `hsb`, `mds`, `msk`, `mtl`, `ssb`, `sci`, `sct`, `scd`, `stt`, `created_at`, `updated_at`) VALUES
+(1, '1AAxxxxxxxx', 'userbaru@gmail.com', 'jhonny', 'backend developer|ui / ux designer|3d floorplanner', 'Hello, introduce me a graduate of the Informatics Engineering study program. I am interested in design, 3D modeling, web frontend programming and also hardware. I have some experience in that field. I hope I can contribute to your company soon. Thanks :)', '1-skill 1|1-skill 2|1-skill 3|1-skill 4|0-skill 5|1-skill 6', NULL, 'lorem ipsum dolor sit amet bajigur goreng krispi', 'fas fa-code|fab fa-figma|fas fa-cube', 'backend developer|ui / ux designer|3d floorplanner', 'lorem ipsum dolor sit amet bajigur goreng krispi 1|lorem ipsum dolor sit amet bajigur goreng krispi 2|lorem ipsum dolor sit amet bajigur goreng krispi 3 ', NULL, '2023-10-09 14:11:32', '2024-02-23 15:53:12'),
+(2, '3RNdopgmyhs', 'userbaru5@gmail.com', 'user baru 5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2024-02-23 21:11:51', '2024-02-23 21:11:51'),
+(3, '3RYfunyjxjp', 'userbaru6@gmail.com', 'user baru 6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2024-02-24 05:23:49', '2024-02-24 05:23:49'),
+(4, '4QVijdyaobp', 'userbaru7@gmail.com', 'user baru 7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2024-02-24 05:30:11', '2024-02-24 05:30:11'),
+(5, '3LBdvetlkjt', 'userbaru8@gmail.com', 'user baru 8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2024-02-24 05:42:18', '2024-02-24 05:42:18');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `profiles`
+--
+ALTER TABLE `profiles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `profiles`
+--
+ALTER TABLE `profiles`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ENV File
+APP_NAME=api_web_profile
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+APP_TIMEZONE=UTC
+
+LOG_CHANNEL=stack
+LOG_SLACK_WEBHOOK_URL=
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=api_web_v1
+DB_USERNAME=root
+DB_PASSWORD=
+
+DB_CONNECTION_2=mysql
+DB_HOST_2=127.0.0.1
+DB_PORT_2=3306
+DB_DATABASE_2=kretech_admin
+DB_USERNAME_2=root
+DB_PASSWORD_2=
+
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
