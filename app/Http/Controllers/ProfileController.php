@@ -33,22 +33,25 @@ class ProfileController extends Controller
         $profile->stt = $user->is_active;
 
         // get data profile from json file
-        $folderPathPro = realpath(__DIR__ . '/../../../') . '\public\json\profile';
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
 
-        // get all file JSON in directory profile
-        $jsonFilesPro = glob($folderPathPro . '/*.json');
+        // get file json
+        $jsonFilePro = glob($folderPathPro . $profile->cod . '.json');
 
-        foreach ($jsonFilesPro as $jsonFilePro) {
-            $jsonDataPro = file_get_contents($jsonFilePro);
-            $decodedDataPro = json_decode($jsonDataPro, true);
-            if (strpos($decodedDataPro['profile']['cod'], $profile->cod) !== false) {
-                $decodedDataPro['profile']['nme']  = $profile->nme;
-                $decodedDataPro['profile']['stt']  = $profile->stt;
-                $profile    = $decodedDataPro;
-            } else {
-                return response([], 200);
-            }
+        if ($jsonFilePro === false) {
+            return response([], 404);
         }
+        
+        $jsonDataPro = file_get_contents($jsonFilePro[0]);
+        $decodedDataPro = json_decode($jsonDataPro, true);
+
+        if ($decodedDataPro === null) {
+            return response([], 403);
+        }
+
+        $decodedDataPro['profile']['nme']  = $profile->nme;
+        $decodedDataPro['profile']['stt']  = $profile->stt;
+        $profile = $decodedDataPro;
 
         $dataload = $profile;
         return response($dataload, 200);
