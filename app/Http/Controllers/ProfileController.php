@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -112,6 +112,51 @@ class ProfileController extends Controller
         }
 
         return response('success create file', 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // get data profile from json file
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+
+        // get file json
+        $jsonFilePro = glob($folderPathPro . $id . '.json');
+
+        if ($jsonFilePro === false) {
+            return response([], 404);
+        }
+
+        $jsonDataPro = file_get_contents($jsonFilePro[0]);
+        $decodedDataPro = json_decode($jsonDataPro, true);
+
+        if ($decodedDataPro === null) {
+            return response([], 403);
+        }
+
+        // get params
+        $name       = $request->name;
+        $about      = $request->about;
+        $profession = $request->profession;
+        $tools      = $request->tools;
+        $skill      = $request->skill;
+
+        // setup update json profile fields
+        $decodedDataPro['profile']['nme'] = $name;
+        $decodedDataPro['profile']['mds'] = $about;
+        $decodedDataPro['profile']['hsb'] = $profession;
+        $decodedDataPro['profile']['mtl'] = $tools;
+        $decodedDataPro['profile']['msk'] = $skill;
+        $profile = json_encode($decodedDataPro);
+
+        // update profile field file json
+        $filePathPro = $folderPathPro . $id . '.json';
+        $update_json = file_put_contents($filePathPro, $profile);
+
+        if (!$update_json) {
+            return response('failed update file', 403);
+        }
+
+        return response('success update file', 200);
     }
 
     public function portfolio_detail($id)
