@@ -26,6 +26,7 @@ $router->get('/', function () use ($router) {
 $router->get('profile/{id}', 'ProfileController@index');
 $router->post('profile/store/{id}', 'ProfileController@store');
 $router->post('profile/update/{id}', 'ProfileController@update');
+$router->post('profile/portfolio/store/{id}', 'ProfileController@portfolio_store');
 $router->get('profile/portfolio/detail/{id}', 'ProfileController@portfolio_detail');
 $router->get('profile/article/detail/{id}', 'ProfileController@article_detail');
 
