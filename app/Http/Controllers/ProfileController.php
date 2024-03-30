@@ -248,6 +248,76 @@ class ProfileController extends Controller
         return response('success store portfolio', 200);
     }
 
+    public function portfolio_update(Request $request, $id)
+    {
+        // get data profile from json file
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+
+        // get file json
+        $jsonFilePro = glob($folderPathPro . $id . '.json');
+
+        if ($jsonFilePro === false) {
+            return response([], 404);
+        }
+
+        $jsonDataPro = file_get_contents($jsonFilePro[0]);
+        $decodedDataPro = json_decode($jsonDataPro, true);
+
+        if ($decodedDataPro === null) {
+            return response([], 403);
+        }
+
+        // check id portfolio
+        if (!in_array($request->id, array_column($decodedDataPro['portfolio'], 'id'))) {
+            return response('failed update portfolio', 403);
+        }
+        
+        // get params
+        $port_id        = $request->id;
+        $title          = $request->title;
+        $category       = $request->category;
+        $client         = $request->client;
+        $link           = $request->link;
+        $content_title  = $request->content_title;
+        $content_desc   = $request->content_desc;
+        $status         = $request->status;
+        $created_at     = $request->created_at;
+        $updated_at     = Date('Y-m-d H:i:s');
+
+        // setup row data store json portfolio fields
+        $portfolio_data = [
+            'id'    => $port_id,
+            'ttl'   => $title,
+            'ctg'   => $category,
+            'cln'   => $client,
+            'lnk'   => $link,
+            'sbt'   => $content_title,
+            'dsc'   => $content_desc,
+            'stt'   => $status,
+            'cat'   => $created_at,
+            'uat'   => $updated_at
+        ];
+
+        // update row data in portfolio by id
+        foreach ($decodedDataPro['portfolio'] as &$item) {
+            if ($item['id'] === $portfolio_data['id']) {
+                $item = $portfolio_data;
+                break;
+            }
+        }
+        $portfolio = json_encode($decodedDataPro);
+
+        // update profile field file json
+        $filePathPro = $folderPathPro . $id . '.json';
+        $update_json = file_put_contents($filePathPro, $portfolio);
+
+        if (!$update_json) {
+            return response('failed update portfolio', 403);
+        }
+
+        return response('success update portfolio', 200);
+    }
+
     public function article_detail($id)
     {
         // get data from json file
