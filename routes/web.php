@@ -29,6 +29,8 @@ $router->post('profile/update/{id}', 'ProfileController@update');
 $router->post('profile/portfolio/store/{id}', 'ProfileController@portfolio_store');
 $router->post('profile/portfolio/update/{id}', 'ProfileController@portfolio_update');
 $router->get('profile/portfolio/detail/{id}', 'ProfileController@portfolio_detail');
+$router->post('profile/article/store/{id}', 'ProfileController@article_store');
+$router->post('profile/article/update/{id}', 'ProfileController@article_update');
 $router->get('profile/article/detail/{id}', 'ProfileController@article_detail');
 
 // // profile

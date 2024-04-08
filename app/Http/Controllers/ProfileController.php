@@ -341,4 +341,127 @@ class ProfileController extends Controller
             return response([], 200);
         }
     }
+
+    public function article_store(Request $request, $id)
+    {
+        // get data profile from json file
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+
+        // get file json
+        $jsonFilePro = glob($folderPathPro . $id . '.json');
+
+        if ($jsonFilePro === false) {
+            return response([], 404);
+        }
+
+        $jsonDataPro = file_get_contents($jsonFilePro[0]);
+        $decodedDataPro = json_decode($jsonDataPro, true);
+
+        if ($decodedDataPro === null) {
+            return response([], 403);
+        }
+
+        // check id article
+        if (in_array($request->id, array_column($decodedDataPro['article'], 'id'))) {
+            return response('failed store article', 403);
+        }
+
+        // get params
+        $art_id         = $request->id;
+        $title          = $request->title;
+        $category       = $request->category;
+        $description    = $request->description;
+        $status         = $request->status;
+        $created_at     = Date('Y-m-d H:i:s');
+        $updated_at     = Date('Y-m-d H:i:s');
+
+        // setup row data store json article fields
+        $article_data = [
+            'id'    => $art_id,
+            'ttl'   => $title,
+            'ctg'   => $category,
+            'dsc'   => $description,
+            'stt'   => $status,
+            'cat'   => $created_at,
+            'uat'   => $updated_at
+        ];
+
+        // add row data into field article
+        $decodedDataPro['article'][] = $article_data;
+        $article = json_encode($decodedDataPro);
+
+        // store profile field file json
+        $filePathPro = $folderPathPro . $id . '.json';
+        $update_json = file_put_contents($filePathPro, $article);
+
+        if (!$update_json) {
+            return response('failed store article', 403);
+        }
+
+        return response('success store article', 200);
+    }
+
+    public function article_update(Request $request, $id)
+    {
+        // get data profile from json file
+        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+
+        // get file json
+        $jsonFilePro = glob($folderPathPro . $id . '.json');
+
+        if ($jsonFilePro === false) {
+            return response([], 404);
+        }
+
+        $jsonDataPro = file_get_contents($jsonFilePro[0]);
+        $decodedDataPro = json_decode($jsonDataPro, true);
+
+        if ($decodedDataPro === null) {
+            return response([], 403);
+        }
+
+        // check id article
+        if (!in_array($request->id, array_column($decodedDataPro['article'], 'id'))) {
+            return response('failed update article', 403);
+        }
+        
+        // get params
+        $art_id         = $request->id;
+        $title          = $request->title;
+        $category       = $request->category;
+        $description    = $request->description;
+        $status         = $request->status;
+        $created_at     = $request->created_at;
+        $updated_at     = Date('Y-m-d H:i:s');
+
+        // setup row data store json article fields
+        $article_data = [
+            'id'    => $art_id,
+            'ttl'   => $title,
+            'ctg'   => $category,
+            'dsc'   => $description,
+            'stt'   => $status,
+            'cat'   => $created_at,
+            'uat'   => $updated_at
+        ];
+
+        // update row data in article by id
+        foreach ($decodedDataPro['article'] as &$item) {
+            if ($item['id'] === $article_data['id']) {
+                $item = $article_data;
+                break;
+            }
+        }
+        $article = json_encode($decodedDataPro);
+
+        // update profile field file json
+        $filePathPro = $folderPathPro . $id . '.json';
+        $update_json = file_put_contents($filePathPro, $article);
+
+        if (!$update_json) {
+            return response('failed update article', 403);
+        }
+
+        return response('success update article', 200);
+    }
 }
