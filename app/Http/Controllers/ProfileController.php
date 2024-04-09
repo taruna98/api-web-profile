@@ -172,10 +172,12 @@ class ProfileController extends Controller
             $decodedData = json_decode($jsonData, true);
             $email = $decodedData['profile']['eml'];
             $name = $decodedData['profile']['nme'];
+            $code = $decodedData['profile']['cod'];
             foreach ($decodedData['portfolio'] as $dataload) {
                 if ($dataload['id'] == $id) {
-                    $dataload['nme'] = $name;
                     $dataload['eml'] = $email;
+                    $dataload['nme'] = $name;
+                    $dataload['cod'] = $code;
                     return response()->json($dataload);
                 }
             }
@@ -331,10 +333,12 @@ class ProfileController extends Controller
             $decodedData = json_decode($jsonData, true);
             $email = $decodedData['profile']['eml'];
             $name = $decodedData['profile']['nme'];
+            $code = $decodedData['profile']['cod'];
             foreach ($decodedData['article'] as $dataload) {
                 if ($dataload['id'] == $id) {
-                    $dataload['nme'] = $name;
                     $dataload['eml'] = $email;
+                    $dataload['nme'] = $name;
+                    $dataload['cod'] = $code;
                     return response()->json($dataload);
                 }
             }
