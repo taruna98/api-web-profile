@@ -58,5 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'failed';
             die();
         }
+    } else if (isset($_FILES['background_home_file_1']) && $_FILES['background_home_file_1']['error'] === UPLOAD_ERR_OK) {
+        $tempPath = $_FILES['background_home_file_1']['tmp_name']; // path temporary file upload
+        $destinationPath = $uploadDirectory . $_FILES['background_home_file_1']['name']; // path file destination
+        // move file uploaded to destination directory
+        if (!move_uploaded_file($tempPath, $destinationPath)) {
+            echo 'failed';
+            die();
+        }
     }
 }
