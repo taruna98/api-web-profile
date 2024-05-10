@@ -161,28 +161,43 @@ class ProfileController extends Controller
 
     public function portfolio_detail($id)
     {
+        // validation parameter
+        if ((strlen($id) != 15) || str_contains($id, '-') != 1) {
+            return response('forbidden', 403);
+        }
+
+        // get parameter
+        $code       = explode('-', $id)[0];
+        $id         = explode('-', $id)[1];
+        $get_file   = $code . '.json';
+
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
-
+        
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
 
         foreach ($jsonFiles as $jsonFile) {
             $jsonData = file_get_contents($jsonFile);
             $decodedData = json_decode($jsonData, true);
-            $email = $decodedData['profile']['eml'];
-            $name = $decodedData['profile']['nme'];
-            $code = $decodedData['profile']['cod'];
-            foreach ($decodedData['portfolio'] as $dataload) {
-                if ($dataload['id'] == $id) {
-                    $dataload['eml'] = $email;
-                    $dataload['nme'] = $name;
-                    $dataload['cod'] = $code;
-                    return response()->json($dataload);
+            $fileName = basename($jsonFile);
+
+            if ($fileName === $get_file) {
+                $email = $decodedData['profile']['eml'];
+                $name = $decodedData['profile']['nme'];
+                $code = $decodedData['profile']['cod'];
+                foreach ($decodedData['portfolio'] as $dataload) {
+                    if ($dataload['id'] == $id) {
+                        $dataload['eml'] = $email;
+                        $dataload['nme'] = $name;
+                        $dataload['cod'] = $code;
+                        return response()->json($dataload);
+                    }
                 }
+                return response([], 200);
             }
-            return response([], 200);
         }
+        return response('not found', 404);
     }
 
     public function portfolio_store(Request $request, $id)
@@ -322,6 +337,16 @@ class ProfileController extends Controller
 
     public function article_detail($id)
     {
+        // validation parameter
+        if ((strlen($id) != 15) || str_contains($id, '-') != 1) {
+            return response('forbidden', 403);
+        }
+
+        // get parameter
+        $code       = explode('-', $id)[0];
+        $id         = explode('-', $id)[1];
+        $get_file   = $code . '.json';
+        
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
 
@@ -331,19 +356,24 @@ class ProfileController extends Controller
         foreach ($jsonFiles as $jsonFile) {
             $jsonData = file_get_contents($jsonFile);
             $decodedData = json_decode($jsonData, true);
-            $email = $decodedData['profile']['eml'];
-            $name = $decodedData['profile']['nme'];
-            $code = $decodedData['profile']['cod'];
-            foreach ($decodedData['article'] as $dataload) {
-                if ($dataload['id'] == $id) {
-                    $dataload['eml'] = $email;
-                    $dataload['nme'] = $name;
-                    $dataload['cod'] = $code;
-                    return response()->json($dataload);
+            $fileName = basename($jsonFile);
+
+            if ($fileName === $get_file) {
+                $email = $decodedData['profile']['eml'];
+                $name = $decodedData['profile']['nme'];
+                $code = $decodedData['profile']['cod'];
+                foreach ($decodedData['article'] as $dataload) {
+                    if ($dataload['id'] == $id) {
+                        $dataload['eml'] = $email;
+                        $dataload['nme'] = $name;
+                        $dataload['cod'] = $code;
+                        return response()->json($dataload);
+                    }
                 }
+                return response([], 200);
             }
-            return response([], 200);
         }
+        return response('not found', 404);
     }
 
     public function article_store(Request $request, $id)
