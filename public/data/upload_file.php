@@ -11,4 +11,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die();
         }
     }
+    if (isset($_POST['profile_cv_file_1'])) {
+        // check statement delete cv
+        if (strpos($_POST['profile_cv_file_1'], 'delete cv')) {
+            echo 'failed';
+            die();
+        }
+        // delete cv from directory file by code user
+        if (!unlink($uploadDirectory . explode('|', $_POST['profile_cv_file_1'])[1])) {
+            echo 'failed';
+            die();
+        }
+    }
 }
+
+
+
+

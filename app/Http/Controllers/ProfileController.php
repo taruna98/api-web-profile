@@ -49,8 +49,18 @@ class ProfileController extends Controller
             return response([], 403);
         }
 
+        // check upload cv
+        $check_profile_cv = DB::connection('mysql2')->table('log_activity')->select('activity')->where('user_id', $user->id)->where('scene', 'Content/Profile/CV')->where('activity', 'like', '% Profile CV')->orderBy('created_at', 'desc')->first();
+        if (!$check_profile_cv) {
+            $status_profile_cv = '0';
+        }
+        $check_profile_cv = explode('-', $check_profile_cv->activity)[2];
+        $check_profile_cv = explode(' ', $check_profile_cv)[1];
+        $status_profile_cv = ($check_profile_cv && $check_profile_cv == 'Delete') ? '-1' : ($check_profile_cv && $check_profile_cv == 'Upload' ? '1' : '0');
+        
         $decodedDataPro['profile']['nme']  = $profile->nme;
         $decodedDataPro['profile']['stt']  = $profile->stt;
+        $decodedDataPro['profile']['scv']  = $status_profile_cv;
         $profile = $decodedDataPro;
 
         $dataload = $profile;
