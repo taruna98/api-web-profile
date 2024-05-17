@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -69,6 +70,32 @@ class ProfileController extends Controller
         return response($dataload, 200);
     }
 
+    public function request(Request $request)
+    {
+        // this function for validation email and get status 1 for send email and waiting approval, 2 for process generate, -2 not generate, 3 success registration, -3 failed registration
+
+        $validator = Validator::make($request->all(), [
+            'email'     => 'required|email',
+            'status'    => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response('not acceptable', 406);
+        }
+
+        // email validation
+
+        // check email exists in system (table users), if exists return status already exists
+
+        // descission by status
+        // if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2
+        // if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)
+        // if status -2, set status -3 (denied), send message to that email (denied register) 
+
+
+        return $request;
+    }
+
     public function store($id)
     {
         // get profile
@@ -76,7 +103,7 @@ class ProfileController extends Controller
             ->where('cod', $id)
             ->first();
         if ($profile == null) {
-            return response([], 200);
+            return response('not found', 404);
         }
 
         $folderPathPro = realpath(__DIR__ . '/../../../') . '\public\json\profile';
@@ -110,6 +137,7 @@ class ProfileController extends Controller
                 "sci": "fas fa-cube|fab fa-cube|fas fa-cube",
                 "sct": "first profession|second profession|third profession",
                 "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
+                "stt": "1",
                 "created_at": "' . $time_now . '",
                 "updated_at": "' . $time_now . '"
             },

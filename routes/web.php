@@ -24,6 +24,7 @@ $router->get('/', function () use ($router) {
 
 // profile
 $router->get('profile/{id}', 'ProfileController@index');
+$router->post('profile/request', 'ProfileController@request');
 $router->post('profile/store/{id}', 'ProfileController@store');
 $router->post('profile/update/{id}', 'ProfileController@update');
 $router->post('profile/portfolio/store/{id}', 'ProfileController@portfolio_store');
@@ -36,10 +37,10 @@ $router->get('profile/article/detail/{id}', 'ProfileController@article_detail');
 // // profile
 // $router->get('profile/{id}', 'ProfileController@index');
 
-// portfolio
-$router->get('portfolio/{id}', 'PortfolioController@index');
-$router->get('portfolio/detail/{id}', 'PortfolioController@detail');
+// // portfolio
+// $router->get('portfolio/{id}', 'PortfolioController@index');
+// $router->get('portfolio/detail/{id}', 'PortfolioController@detail');
 
-// article
-$router->get('article/{id}', 'ArticleController@index');
-$router->get('article/detail/{id}', 'ArticleController@detail');
+// // article
+// $router->get('article/{id}', 'ArticleController@index');
+// $router->get('article/detail/{id}', 'ArticleController@detail');
