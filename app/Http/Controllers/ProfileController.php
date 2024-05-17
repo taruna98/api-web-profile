@@ -41,7 +41,7 @@ class ProfileController extends Controller
         if ($jsonFilePro === false) {
             return response([], 404);
         }
-        
+
         $jsonDataPro = file_get_contents($jsonFilePro[0]);
         $decodedDataPro = json_decode($jsonDataPro, true);
 
@@ -51,13 +51,15 @@ class ProfileController extends Controller
 
         // check upload cv
         $check_profile_cv = DB::connection('mysql2')->table('log_activity')->select('activity')->where('user_id', $user->id)->where('scene', 'Content/Profile/CV')->where('activity', 'like', '% Profile CV')->orderBy('created_at', 'desc')->first();
-        if (!$check_profile_cv) {
+
+        if ($check_profile_cv != '') {
+            $check_profile_cv = explode('-', $check_profile_cv->activity)[2];
+            $check_profile_cv = explode(' ', $check_profile_cv)[1];
+            $status_profile_cv = ($check_profile_cv && $check_profile_cv == 'Delete') ? '-1' : ($check_profile_cv && $check_profile_cv == 'Upload' ? '1' : '0');
+        } else {
             $status_profile_cv = '0';
         }
-        $check_profile_cv = explode('-', $check_profile_cv->activity)[2];
-        $check_profile_cv = explode(' ', $check_profile_cv)[1];
-        $status_profile_cv = ($check_profile_cv && $check_profile_cv == 'Delete') ? '-1' : ($check_profile_cv && $check_profile_cv == 'Upload' ? '1' : '0');
-        
+
         $decodedDataPro['profile']['nme']  = $profile->nme;
         $decodedDataPro['profile']['stt']  = $profile->stt;
         $decodedDataPro['profile']['scv']  = $status_profile_cv;
@@ -183,7 +185,7 @@ class ProfileController extends Controller
 
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
-        
+
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
 
@@ -298,7 +300,7 @@ class ProfileController extends Controller
         if (!in_array($request->id, array_column($decodedDataPro['portfolio'], 'id'))) {
             return response('failed update portfolio', 403);
         }
-        
+
         // get params
         $port_id        = $request->id;
         $title          = $request->title;
@@ -356,7 +358,7 @@ class ProfileController extends Controller
         $code       = explode('-', $id)[0];
         $id         = explode('-', $id)[1];
         $get_file   = $code . '.json';
-        
+
         // get data from json file
         $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
 
@@ -468,7 +470,7 @@ class ProfileController extends Controller
         if (!in_array($request->id, array_column($decodedDataPro['article'], 'id'))) {
             return response('failed update article', 403);
         }
-        
+
         // get params
         $art_id         = $request->id;
         $title          = $request->title;
