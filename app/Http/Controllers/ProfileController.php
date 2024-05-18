@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class ProfileController extends Controller
 {
@@ -70,7 +72,7 @@ class ProfileController extends Controller
         return response($dataload, 200);
     }
 
-    public function request(Request $request)
+    public function request(Request $request, PHPMailer $mailer)
     {
         // this function for validation email and get status 1 for send email and waiting approval, 2 for process generate, -2 not generate, 3 success registration, -3 failed registration
 
@@ -83,17 +85,43 @@ class ProfileController extends Controller
             return response('not acceptable', 406);
         }
 
+        // declare variable
+        $email  = $request->email;
+        $status = $request->status;
+
         // email validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return response('expectation failed', 417);
+        }
 
         // check email exists in system (table users), if exists return status already exists
+        $check_email = DB::connection('mysql2')->table('users')->where('email', $email)->first();
+        if ($check_email !== null) {
+            return response('precondition failed', 412);
+        }
 
-        // descission by status
-        // if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2
-        // if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)
-        // if status -2, set status -3 (denied), send message to that email (denied register) 
+        if ($status == '1') {
+            // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2';
 
 
-        return $request;
+
+            try {
+                $mailer->addAddress('jhonny.ocnr@gmail.com', 'Taruna');
+                $mailer->isHTML(true);
+                $mailer->Subject = 'Subject of the email';
+                $mailer->Body    = 'This is the HTML message body <b>in bold!</b>';
+                $mailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                $mailer->send();
+                return response()->json(['message' => 'Email telah dikirim'], 200);
+            } catch (Exception $e) {
+                return response()->json(['message' => "Email tidak dapat dikirim. PHPMailer Error: {$mailer->ErrorInfo}"], 500);
+            }
+        } else if ($status == '2') {
+            return 'if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
+        } else if ($status == '-2') {
+            return 'if status -2, set status -3 (denied), send message to that email (denied register)';
+        }
     }
 
     public function store($id)

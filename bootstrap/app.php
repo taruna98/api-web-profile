@@ -94,7 +94,8 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
-$app->register(Illuminate\Database\DatabaseServiceProvider::class); // Tambahkan ini
+$app->register(App\Providers\MailServiceProvider::class); // additional
+$app->register(Illuminate\Database\DatabaseServiceProvider::class); // additional
 
 /*
 |--------------------------------------------------------------------------
