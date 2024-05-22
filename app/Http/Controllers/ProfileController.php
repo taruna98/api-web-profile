@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Providers\MailServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -72,7 +74,16 @@ class ProfileController extends Controller
         return response($dataload, 200);
     }
 
-    public function request(Request $request, PHPMailer $mailer)
+    public function is_online($site = 'https://youtube.com/')
+    {
+        if (@fopen($site, "r")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function request(Request $request)
     {
         // this function for validation email and get status 1 for send email and waiting approval, 2 for process generate, -2 not generate, 3 success registration, -3 failed registration
 
@@ -80,6 +91,10 @@ class ProfileController extends Controller
             'email'     => 'required|email',
             'status'    => 'required'
         ]);
+
+        if (!$this->is_online()) {
+            return response('connection timed out', 522);
+        }
 
         if ($validator->fails()) {
             return response('not acceptable', 406);
@@ -103,7 +118,42 @@ class ProfileController extends Controller
         if ($status == '1') {
             // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2';
 
+            $name = 'John Doe';
+            Mail::to('taruna.ofc@gmail.com')->send(new MailServiceProvider($name));
+            return 'Email sent successfully.';
 
+            $mail = new PHPMailer;
+
+            $mail->isSMTP();
+            $mail->SMTPAuth = true;
+            $mail->Host = "smtp.gmail.com";
+            $mail->Username = "meemp2021@gmail.com";
+            $mail->Password = "emp_2021";
+            $mail->Port = 465;
+            $mail->SMTPSecure = "ssl";
+
+            $mail->isHTML(true);
+            $mail->setFrom("noreply@gmail.com", "RF Team");
+            $mail->addAddress($email);
+            $mail->Subject = "Testing Admin";
+            $url = "www.google.com";
+            $link = "<a href='" . $url . "'>Verifikasi Disini !</a>";
+            $body = "
+            <h2>Halo, terimakasih telah mendaftarkan diri kamu</h2>
+            <br>
+            <p>Silahkan klik link dibawah ini untuk melakukan verifikasi</p>
+            <br>
+            <h3>" . $link . "</h3>
+            <br>
+            <p>Terimakasih :)</p>
+            ";
+            $mail->Body = $body;
+
+            if ($mail->send()) {
+                return response()->json(['message' => 'Email telah dikirim'], 200);
+            } else {
+                return response()->json(['message' => "Email tidak dapat dikirim. PHPMailer Error: {$mail->ErrorInfo}"], 500);
+            }
 
             try {
                 $mailer->addAddress('jhonny.ocnr@gmail.com', 'Taruna');
