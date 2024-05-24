@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Providers\MailServiceProvider;
+use App\Mail\BrevoMail;
+use App\Services\BrevoService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -12,6 +13,8 @@ use PHPMailer\PHPMailer\Exception;
 
 class ProfileController extends Controller
 {
+    protected $brevoService;
+
     // public function __construct()
     // {
     //     $this->middleware('auth');
@@ -74,7 +77,7 @@ class ProfileController extends Controller
         return response($dataload, 200);
     }
 
-    public function is_online($site = 'https://youtube.com/')
+    public function is_online($site = 'https://youtube.com/') // change youtube to our website
     {
         if (@fopen($site, "r")) {
             return true;
@@ -83,7 +86,7 @@ class ProfileController extends Controller
         }
     }
 
-    public function request(Request $request)
+    public function request(Request $request, BrevoService $brevoService)
     {
         // this function for validation email and get status 1 for send email and waiting approval, 2 for process generate, -2 not generate, 3 success registration, -3 failed registration
 
@@ -101,8 +104,9 @@ class ProfileController extends Controller
         }
 
         // declare variable
-        $email  = $request->email;
-        $status = $request->status;
+        $email      = $request->email;
+        $status     = $request->status;
+        $url_send   = 'www.youtube.com';
 
         // email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -118,55 +122,21 @@ class ProfileController extends Controller
         if ($status == '1') {
             // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2';
 
-            $name = 'John Doe';
-            Mail::to('taruna.ofc@gmail.com')->send(new MailServiceProvider($name));
-            return 'Email sent successfully.';
+            // send email to user
+            $to         = $email;
+            $subject    = 'Kretech - Register Web Portfolio';
+            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah menggunakan melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank">disini</a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
 
-            $mail = new PHPMailer;
+            // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
 
-            $mail->isSMTP();
-            $mail->SMTPAuth = true;
-            $mail->Host = "smtp.gmail.com";
-            $mail->Username = "meemp2021@gmail.com";
-            $mail->Password = "emp_2021";
-            $mail->Port = 465;
-            $mail->SMTPSecure = "ssl";
-
-            $mail->isHTML(true);
-            $mail->setFrom("noreply@gmail.com", "RF Team");
-            $mail->addAddress($email);
-            $mail->Subject = "Testing Admin";
-            $url = "www.google.com";
-            $link = "<a href='" . $url . "'>Verifikasi Disini !</a>";
-            $body = "
-            <h2>Halo, terimakasih telah mendaftarkan diri kamu</h2>
-            <br>
-            <p>Silahkan klik link dibawah ini untuk melakukan verifikasi</p>
-            <br>
-            <h3>" . $link . "</h3>
-            <br>
-            <p>Terimakasih :)</p>
-            ";
-            $mail->Body = $body;
-
-            if ($mail->send()) {
-                return response()->json(['message' => 'Email telah dikirim'], 200);
-            } else {
-                return response()->json(['message' => "Email tidak dapat dikirim. PHPMailer Error: {$mail->ErrorInfo}"], 500);
+            $sendEmail  = $brevoService->sendEmail($to, $subject, $body);
+            if (!$sendEmail) {
+                return response('precondition failed', 412);
             }
 
-            try {
-                $mailer->addAddress('jhonny.ocnr@gmail.com', 'Taruna');
-                $mailer->isHTML(true);
-                $mailer->Subject = 'Subject of the email';
-                $mailer->Body    = 'This is the HTML message body <b>in bold!</b>';
-                $mailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            // save to table tasking and user_requests and set status and other
 
-                $mailer->send();
-                return response()->json(['message' => 'Email telah dikirim'], 200);
-            } catch (Exception $e) {
-                return response()->json(['message' => "Email tidak dapat dikirim. PHPMailer Error: {$mailer->ErrorInfo}"], 500);
-            }
+            return response('success send email', 200);
         } else if ($status == '2') {
             return 'if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
         } else if ($status == '-2') {

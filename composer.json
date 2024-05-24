@@ -6,10 +6,12 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "getbrevo/brevo-php": "^2.0",
         "guzzlehttp/guzzle": "^7.8",
         "illuminate/mail": "^8.83",
         "laravel/lumen-framework": "^8.3.1",
         "phpmailer/phpmailer": "^6.9",
+        "sendinblue/api-v3-sdk": "^8.4",
         "symfony/mailer": "^5.4"
     },
     "require-dev": {
