@@ -268,7 +268,22 @@ class ProfileController extends Controller
             // redirect to page waiting
             return response('redirect to page waiting', 200);
         } else if ($status == '3') { // set status by admin from opsadmin
-            return 'if status 3, set status 3 (approved), create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
+            // return 'if status 3, set status 3 (approved), create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
+
+            // update status to 3 in table tasking admin approved user request
+
+            // update status to 3 in table user_rquests admin approved user request
+
+            // create profile user in table users opsadmin
+
+            // create user in api table profiles include generate code
+
+            // hit api for store (create json file in api project)
+
+            // send message to that email (success register)
+
+            // return success response
+            return response('success register user', 201);
         } else if ($status == '-3') { // set status by admin from opsadmin
             return 'if status -3, set status -3 (denied), send message to that email (denied register)';
         }
