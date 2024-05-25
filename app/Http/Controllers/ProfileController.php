@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\BrevoMail;
 use App\Services\BrevoService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -107,6 +108,7 @@ class ProfileController extends Controller
         $email      = $request->email;
         $status     = $request->status;
         $url_send   = 'www.youtube.com';
+        $timezone   = 'Asia/Jakarta';
 
         // email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -119,13 +121,43 @@ class ProfileController extends Controller
             return response('precondition failed', 412);
         }
 
+        // status : 1 = email send to user and waiting response from user, 2 = user click verified link and waiting response from admin, 3 = admin approved, -3 = admin not approved
+
         if ($status == '1') {
-            // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 2';
+            // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 1';
+
+            // check from table user_requests
+            $check_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 1)->first();
+
+            if ($check_user_requests) {
+                $created_at = $check_user_requests->created_at;
+                $date_time_created = Carbon::parse($created_at, $timezone);
+                $now = Carbon::now($timezone);
+                $now_min_3_days = $now->copy()->subDays(3);
+                $date_time_created_plus3_days = $date_time_created->copy()->addDays(3);
+
+                // check last register
+                if ($date_time_created > $now_min_3_days) {
+                    // send email to user for click link or waiting
+                    $to         = $email;
+                    $subject    = 'Kretech - Register Web Portfolio';
+                    $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Anda telah melakukan registrasi untuk membuat Website Portfolio ini sebelumnya. Silahkan cek email Anda atau silahkan registrasi ulang setelah tanggal ' . $date_time_created_plus3_days . ' dan nantikan informasi selanjutnya.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
+
+                    // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
+
+                    $sendEmail  = $brevoService->sendEmail($to, $subject, $body);
+                    if (!$sendEmail) {
+                        return response('precondition failed', 412);
+                    } else {
+                        return response('email notification send', 200);
+                    }
+                }
+            }
 
             // send email to user
             $to         = $email;
             $subject    = 'Kretech - Register Web Portfolio';
-            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah menggunakan melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank">disini</a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
+            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank">disini</a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
 
             // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
 
@@ -134,9 +166,59 @@ class ProfileController extends Controller
                 return response('precondition failed', 412);
             }
 
-            // save to table tasking and user_requests and set status and other
+            // tasking : user_id = 0, module = Kretech, scene = Register, task = Web Profile, admin_id = 0, status = 1
+            $task_user_id   = 0;
+            $task_module    = 'Kretech';
+            $task_scene     = 'Register';
+            $task_task      = 'Web Profile';
+            $task_admin_id  = 0;
+            $task_status    = 1;
 
-            return response('success send email', 200);
+            // $task_temp = [
+            //     'task_user_id'   => $task_user_id,
+            //     'task_module'    => $task_module,
+            //     'task_scene'     => $task_scene,
+            //     'task_task'      => $task_task,
+            //     'task_admin_id'  => $task_admin_id,
+            //     'task_status'    => $task_status
+            // ];
+
+            $insert_tasking = DB::connection('mysql2')->table('tasking')->insertGetId([
+                'user_id'   => $task_user_id,
+                'module'    => $task_module,
+                'scene'     => $task_scene,
+                'task'      => $task_task,
+                'admin_id'  => $task_admin_id,
+                'status'    => $task_status
+            ]);
+            if (!$insert_tasking) {
+                return response('precondition failed', 412);
+            }
+
+            // user_requests : task_id = id, module = Kretech, email = user@email.com, status = 1
+            $user_req_task_id   = $insert_tasking;
+            $user_req_module    = 'Kretech';
+            $user_req_email     = 'Register';
+            $user_req_status    = 1;
+
+            // $user_req_temp = [
+            //     'user_req_task_id'   => $user_req_task_id,
+            //     'user_req_module'    => $user_req_module,
+            //     'user_req_email'     => $user_req_email,
+            //     'user_req_status'    => $user_req_status
+            // ];
+
+            $insert_user_requests = DB::connection('mysql2')->table('user_requests')->insert([
+                'task_id'   => $user_req_task_id,
+                'module'    => $user_req_module,
+                'email'     => $email,
+                'status'    => $user_req_status
+            ]);
+            if (!$insert_user_requests) {
+                return response('precondition failed', 412);
+            }
+
+            return response('email send', 200);
         } else if ($status == '2') {
             return 'if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
         } else if ($status == '-2') {
