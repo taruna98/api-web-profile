@@ -7,6 +7,7 @@ use App\Services\BrevoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -17,10 +18,33 @@ class ProfileController extends Controller
 {
     protected $brevoService;
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        // $this->middleware('auth');
+
+        // function kretech generate code profile
+        function generateCode($length = 11)
+        {
+            $characters = 'abcdefghijklmnopqrstuvwxyz';
+            $code = '';
+
+            // generate the first character (3 or 4)
+            $firstChar = (string) rand(3, 4);
+            $code .= $firstChar;
+
+            // generate the second and third characters (uppercase letters)
+            $code .= chr(rand(65, 90)); // uppercase letter
+            $code .= chr(rand(65, 90)); // uppercase letter
+
+            // generate the rest of the characters
+            $max = strlen($characters) - 1;
+            for ($i = 0; $i < $length - 3; $i++) {
+                $code .= $characters[rand(0, $max)];
+            }
+
+            return $code;
+        }
+    }
 
     public function index($id)
     {
@@ -181,7 +205,7 @@ class ProfileController extends Controller
             // send email to user
             $to         = $email;
             $subject    = 'Kretech - Register Web Portfolio';
-            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank"><i>disini</i></a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
+            $body       = '<html><body><h4>Hi, ' . explode('@', $email)[0] . '</h4><p>Terimakasih telah melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank"><i>disini</i></a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</p><p>Salam Hormat, <br><br>Kretech Team</p></body></html>';
 
             // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
 
@@ -248,6 +272,13 @@ class ProfileController extends Controller
 
             // get from table user_requests
             $get_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 1)->first();
+            if (!$get_user_requests) {
+                $get_user_requests_2 = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 2)->first();
+                if ($get_user_requests_2) {
+                    // link already clicked
+                    return response('link already clicked', 200);
+                }
+            }
 
             // update status to 2 in table tasking user verified link
             $update_user_request = DB::connection('mysql2')->table('user_requests')
@@ -270,17 +301,56 @@ class ProfileController extends Controller
         } else if ($status == '3') { // set status by admin from opsadmin
             // return 'if status 3, set status 3 (approved), create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
 
+            // get params
+            $code               = generateCode();
+            // ---
+            $opsadmin_url       = 'http://127.0.0.1:8002/';
+            $opsadmin_pass      = '123456';
+            $web_profile_url    = 'http://localhost/web_profile_v1/?proid/' . $code;
+
+            // get from table user_requests
+            $get_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 2)->first();
+
             // update status to 3 in table tasking admin approved user request
+            $update_user_request = DB::connection('mysql2')->table('user_requests')
+                ->where('email', $email)
+                ->update(['status' => 3]);
+            if (!$update_user_request) {
+                return response('precondition failed', 412);
+            }
 
             // update status to 3 in table user_rquests admin approved user request
-
-            // create profile user in table users opsadmin
+            $update_tasking = DB::connection('mysql2')->table('tasking')
+                ->where('id', $get_user_requests->task_id)
+                ->update(['status' => 3]);
+            if (!$update_tasking) {
+                return response('precondition failed', 412);
+            }
 
             // create user in api table profiles include generate code
+            $profile_create = DB::connection('mysql')->table('profiles')->insert([
+                'cod'   => $code,
+                'eml'   => $email
+            ]);
+            if (!$profile_create) {
+                return response('precondition failed', 412);
+            }
 
             // hit api for store (create json file in api project)
+            $response = $this->store($code); // call function store with method post
+            if ($response == 'failed create file') {
+                return response('precondition failed', 412);
+            }
 
             // send message to that email (success register)
+            $to         = $email;
+            $subject    = 'Kretech - Register Web Portfolio';
+            $body       = '<html><body><h4>Selamat, ' . explode('@', $email)[0] . '</h4><br><p>Web Profile Anda berhasil didaftarkan. Silahkan akses melalui link berikut,</p><p>Web Url : <a href="' . $web_profile_url . '" target"_blank">Profile</a></p><p>CMS (Content Management System) : <a href="' . $opsadmin_url . '" target"_blank">Content Management</a></p></p><p>Password CMS : ' . $opsadmin_pass . '</p><br><p>Salam Hormat, <br><br>Kretech Team</p></body></html>';
+            // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', web url : ' . $web_profile_url . ', cms url : ' . $opsadmin_url . ', pass cms : ' . $opsadmin_pass;
+            $sendEmail = $brevoService->sendEmail($to, $subject, $body);
+            if (!$sendEmail) {
+                return response('precondition failed', 412);
+            }
 
             // return success response
             return response('success register user', 201);
@@ -312,7 +382,7 @@ class ProfileController extends Controller
         $file_id    = $profile->id;
         $code       = $id;
         $email      = $profile->eml;
-        $name       = $profile->nme;
+        $name       = preg_match('/^[^._\d]+/', $email, $matches) ? ucfirst($matches[0]) : 'User';
         $time_now   = date('Y-m-d H:i:s');
 
         // data for file json
