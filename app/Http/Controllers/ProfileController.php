@@ -7,6 +7,7 @@ use App\Services\BrevoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -87,6 +88,14 @@ class ProfileController extends Controller
         }
     }
 
+    public function request_mail(Request $request, BrevoService $brevoService)
+    {
+        // call function request with method post
+        $response = $this->request($request, $brevoService);
+
+        return $response;
+    }
+
     public function request(Request $request, BrevoService $brevoService)
     {
         // this function for validation email and get status 1 for send email and waiting approval, 2 for process generate, -2 not generate, 3 success registration, -3 failed registration
@@ -107,7 +116,7 @@ class ProfileController extends Controller
         // declare variable
         $email      = $request->email;
         $status     = $request->status;
-        $url_send   = 'www.youtube.com';
+        $url_send   = env('APP_URL') . '/profile/request/mail/?email=' . $email . '&status=' . 2;
         $timezone   = 'Asia/Jakarta';
 
         // email validation
@@ -121,9 +130,9 @@ class ProfileController extends Controller
             return response('precondition failed', 412);
         }
 
-        // status : 1 = email send to user and waiting response from user, 2 = user click verified link and waiting response from admin, 3 = admin approved, -3 = admin not approved
+        // status : 1 = email send to user and waiting response from user, 2 = user click verified link and waiting response from admin, -2 = user not verified link, 3 = admin approved, -3 = admin not approved
 
-        if ($status == '1') {
+        if ($status == '1') { // set status by user from registration
             // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 1';
 
             // check from table user_requests
@@ -143,7 +152,7 @@ class ProfileController extends Controller
                     $subject    = 'Kretech - Register Web Portfolio';
                     $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Anda telah melakukan registrasi untuk membuat Website Portfolio ini sebelumnya. Silahkan cek email Anda atau silahkan registrasi ulang setelah tanggal ' . $date_time_created_plus3_days . ' dan nantikan informasi selanjutnya.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
 
-                    // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
+                    // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', register again at : ' . $date_time_created_plus3_days;
 
                     $sendEmail  = $brevoService->sendEmail($to, $subject, $body);
                     if (!$sendEmail) {
@@ -151,13 +160,28 @@ class ProfileController extends Controller
                     } else {
                         return response('email notification send', 200);
                     }
+                } else {
+                    // update status to -2 is user not verified link
+                    $update_user_request = DB::connection('mysql2')->table('user_requests')
+                        ->where('email', $email)
+                        ->update(['status' => -2]);
+                    if (!$update_user_request) {
+                        return response('precondition failed', 412);
+                    }
+
+                    $update_tasking = DB::connection('mysql2')->table('tasking')
+                        ->where('id', $check_user_requests->task_id)
+                        ->update(['status' => -2]);
+                    if (!$update_tasking) {
+                        return response('precondition failed', 412);
+                    }
                 }
             }
 
             // send email to user
             $to         = $email;
             $subject    = 'Kretech - Register Web Portfolio';
-            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank">disini</a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
+            $body       = '<html><body><h2>Hi, ' . explode('@', $email)[0] . '</h2><h3>Terimakasih telah melakukan registrasi untuk membuat Website Portfolio ini. Silahkan klik <a href="' . $url_send . '" target="_blank"><i>disini</i></a> untuk melakukan Verifikasi dan nantikan informasi selanjutnya dalam 3 Hari kedepan.</h3><h3>Salam Hormat, <br><br>Kretech Team</h3></body></html>';
 
             // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body . ', url_send : ' . $url_send;
 
@@ -198,7 +222,7 @@ class ProfileController extends Controller
             // user_requests : task_id = id, module = Kretech, email = user@email.com, status = 1
             $user_req_task_id   = $insert_tasking;
             $user_req_module    = 'Kretech';
-            $user_req_email     = 'Register';
+            $user_req_email     = $email;
             $user_req_status    = 1;
 
             // $user_req_temp = [
@@ -211,7 +235,7 @@ class ProfileController extends Controller
             $insert_user_requests = DB::connection('mysql2')->table('user_requests')->insert([
                 'task_id'   => $user_req_task_id,
                 'module'    => $user_req_module,
-                'email'     => $email,
+                'email'     => $user_req_email,
                 'status'    => $user_req_status
             ]);
             if (!$insert_user_requests) {
@@ -219,10 +243,34 @@ class ProfileController extends Controller
             }
 
             return response('email send', 200);
-        } else if ($status == '2') {
-            return 'if status 2, create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
-        } else if ($status == '-2') {
-            return 'if status -2, set status -3 (denied), send message to that email (denied register)';
+        } else if ($status == '2') { // set status by user from verification email
+            // return 'if status 2, update status to 2 in table tasking and user_requests to waiting approval from admin then redirect user to page waiting to approve by admin';
+
+            // get from table user_requests
+            $get_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 1)->first();
+
+            // update status to 2 in table tasking user verified link
+            $update_user_request = DB::connection('mysql2')->table('user_requests')
+                ->where('email', $email)
+                ->update(['status' => 2]);
+            if (!$update_user_request) {
+                return response('precondition failed', 412);
+            }
+
+            // update status to 2 in table user_rquests user verified link
+            $update_tasking = DB::connection('mysql2')->table('tasking')
+                ->where('id', $get_user_requests->task_id)
+                ->update(['status' => 2]);
+            if (!$update_tasking) {
+                return response('precondition failed', 412);
+            }
+
+            // redirect to page waiting
+            return response('redirect to page waiting', 200);
+        } else if ($status == '3') { // set status by admin from opsadmin
+            return 'if status 3, set status 3 (approved), create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
+        } else if ($status == '-3') { // set status by admin from opsadmin
+            return 'if status -3, set status -3 (denied), send message to that email (denied register)';
         }
     }
 
