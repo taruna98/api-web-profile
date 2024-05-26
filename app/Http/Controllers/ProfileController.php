@@ -151,7 +151,7 @@ class ProfileController extends Controller
         // check email exists in system (table users), if exists return status already exists
         $check_email = DB::connection('mysql2')->table('users')->where('email', $email)->first();
         if ($check_email !== null) {
-            return response('precondition failed', 412);
+            return response('user already exists', 302);
         }
 
         // status : 1 = email send to user and waiting response from user, 2 = user click verified link and waiting response from admin, -2 = user not verified link, 3 = admin approved, -3 = admin not approved
@@ -188,6 +188,7 @@ class ProfileController extends Controller
                     // update status to -2 is user not verified link
                     $update_user_request = DB::connection('mysql2')->table('user_requests')
                         ->where('email', $email)
+                        ->where('status', 1)
                         ->update(['status' => -2]);
                     if (!$update_user_request) {
                         return response('precondition failed', 412);
@@ -283,6 +284,7 @@ class ProfileController extends Controller
             // update status to 2 in table tasking user verified link
             $update_user_request = DB::connection('mysql2')->table('user_requests')
                 ->where('email', $email)
+                ->where('status', 1)
                 ->update(['status' => 2]);
             if (!$update_user_request) {
                 return response('precondition failed', 412);
@@ -314,6 +316,7 @@ class ProfileController extends Controller
             // update status to 3 in table tasking admin approved user request
             $update_user_request = DB::connection('mysql2')->table('user_requests')
                 ->where('email', $email)
+                ->where('status', 2)
                 ->update(['status' => 3]);
             if (!$update_user_request) {
                 return response('precondition failed', 412);
@@ -355,7 +358,40 @@ class ProfileController extends Controller
             // return success response
             return response('success register user', 201);
         } else if ($status == '-3') { // set status by admin from opsadmin
-            return 'if status -3, set status -3 (denied), send message to that email (denied register)';
+            // return 'if status -3, set status -3 (rejected), send message to that email (rejected register)';
+
+            // get from table user_requests
+            $get_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 2)->first();
+
+            // update status to -3 in table tasking admin rejected user request
+            $update_user_request = DB::connection('mysql2')->table('user_requests')
+                ->where('email', $email)
+                ->where('status', 2)
+                ->update(['status' => -3]);
+            if (!$update_user_request) {
+                return response('precondition failed', 412);
+            }
+
+            // update status to -3 in table user_rquests admin rejected user request
+            $update_tasking = DB::connection('mysql2')->table('tasking')
+                ->where('id', $get_user_requests->task_id)
+                ->update(['status' => -3]);
+            if (!$update_tasking) {
+                return response('precondition failed', 412);
+            }
+
+            // send message to that email (rejected)
+            $to         = $email;
+            $subject    = 'Kretech - Register Web Portfolio';
+            $body       = '<html><body><h4>Hai, ' . explode('@', $email)[0] . '</h4><br><p>Maaf, Web Profile Anda tidak dapat didaftarkan. Silahkan lakukan registrasi ulang, Terima Kasih.</p><br><p>Salam Hormat, <br><br>Kretech Team</p></body></html>';
+            // return 'email to : ' . $email . ', subject : ' . $subject . ', body : ' . $body;
+            $sendEmail = $brevoService->sendEmail($to, $subject, $body);
+            if (!$sendEmail) {
+                return response('precondition failed', 412);
+            }
+
+            // return success response
+            return response('rejected user', 200);
         }
     }
 
