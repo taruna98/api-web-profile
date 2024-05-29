@@ -151,7 +151,7 @@ class ProfileController extends Controller
         // check email exists in system (table users), if exists return status already exists
         $check_email = DB::connection('mysql2')->table('users')->where('email', $email)->first();
         if ($check_email !== null) {
-            return response('user already exists', 302);
+            return response('user already exists', 208);
         }
 
         // status : 1 = email send to user and waiting response from user, 2 = user click verified link and waiting response from admin, -2 = user not verified link, 3 = admin approved, -3 = admin not approved
