@@ -138,10 +138,11 @@ class ProfileController extends Controller
         }
 
         // declare variable
-        $email      = $request->email;
-        $status     = $request->status;
-        $url_send   = env('APP_URL') . '/profile/request/mail/?email=' . $email . '&status=' . 2;
-        $timezone   = 'Asia/Jakarta';
+        $email          = $request->email;
+        $status         = $request->status;
+        $url_send       = env('APP_URL') . '/profile/request/mail/?email=' . $email . '&status=' . 2;
+        $url_redirect   = env('WEB_COMPANY_URL') . '/?102';
+        $timezone       = 'Asia/Jakarta';
 
         // email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -159,7 +160,7 @@ class ProfileController extends Controller
         if ($status == '1') { // set status by user from registration
             // return 'if status 1, send message to that email (click link for verification), save to table task opsadmin waiting for accept by admin and set status 1';
 
-            // check from table user_requests
+            // check from table user_requests where status 1
             $check_user_requests = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 1)->first();
 
             if ($check_user_requests) {
@@ -201,6 +202,12 @@ class ProfileController extends Controller
                         return response('precondition failed', 412);
                     }
                 }
+            }
+
+            // check from table user_requests where status 2
+            $check_user_requests_2 = DB::connection('mysql2')->table('user_requests')->where('email', $email)->where('status', 2)->first();
+            if ($check_user_requests_2) {
+                return response('email notification send', 200);
             }
 
             // send email to user
@@ -299,7 +306,8 @@ class ProfileController extends Controller
             }
 
             // redirect to page waiting
-            return response('redirect to page waiting', 200);
+            // return response('redirect to page waiting', 200);
+            return redirect($url_redirect);
         } else if ($status == '3') { // set status by admin from opsadmin
             // return 'if status 3, set status 3 (approved), create profile user in table users opsadmin, create user in api table profiles include generate code, hit api for store (create json file in api project), send message to that email (success register), set status 3 (success)';
 
