@@ -1,0 +1,21 @@
+{
+            "profile": {
+                "id": 25,
+                "cod": "3HOrxvbbiil",
+                "eml": "taruna.ofc@gmail.com",
+                "nme": "Taruna",
+                "hsb": "dummy header",
+                "mds": "Hello, let's fill your description",
+                "msk": "FIRST SKILL|SECOND SKILL|THIRD SKILL",
+                "mtl": "First Tool|Second Tool|Third Tool",
+                "ssb": "This is my service",
+                "sci": "fas fa-cube|fas fa-cube|fas fa-cube",
+                "sct": "first profession|second profession|third profession",
+                "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
+                "stt": "1",
+                "created_at": "2024-05-31 14:56:59",
+                "updated_at": "2024-05-31 14:56:59"
+            },
+            "portfolio": [],
+            "article": []
+        }

@@ -441,7 +441,7 @@ class ProfileController extends Controller
                 "msk": "FIRST SKILL|SECOND SKILL|THIRD SKILL",
                 "mtl": "First Tool|Second Tool|Third Tool",
                 "ssb": "This is my service",
-                "sci": "fas fa-cube|fab fa-cube|fas fa-cube",
+                "sci": "fas fa-cube|fas fa-cube|fas fa-cube",
                 "sct": "first profession|second profession|third profession",
                 "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
                 "stt": "1",
