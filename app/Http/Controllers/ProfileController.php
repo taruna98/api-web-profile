@@ -442,8 +442,8 @@ class ProfileController extends Controller
                 "mtl": "First Tool|Second Tool|Third Tool",
                 "ssb": "This is my service",
                 "sci": "fas fa-cube|fas fa-cube|fas fa-cube",
-                "sct": "first profession|second profession|third profession",
-                "scd": "Your first profession description.|Your second profession description.|Your third profession description.",
+                "sct": "first service|second service|third service",
+                "scd": "Your first service description.|Your second service description.|Your third service description.",
                 "stt": "1",
                 "created_at": "' . $time_now . '",
                 "updated_at": "' . $time_now . '"
