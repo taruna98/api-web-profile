@@ -519,7 +519,7 @@ class ProfileController extends Controller
         $get_file   = $code . '.json';
 
         // get data from json file
-        $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
+        $folderPath = base_path('public/json/profile');
 
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
@@ -550,7 +550,7 @@ class ProfileController extends Controller
     public function portfolio_store(Request $request, $id)
     {
         // get data profile from json file
-        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+        $folderPathPro = base_path('public/json/profile');
 
         // get file json
         $jsonFilePro = glob($folderPathPro . $id . '.json');
@@ -615,7 +615,7 @@ class ProfileController extends Controller
     public function portfolio_update(Request $request, $id)
     {
         // get data profile from json file
-        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+        $folderPathPro = base_path('public/json/profile');
 
         // get file json
         $jsonFilePro = glob($folderPathPro . $id . '.json');
@@ -695,7 +695,7 @@ class ProfileController extends Controller
         $get_file   = $code . '.json';
 
         // get data from json file
-        $folderPath = realpath(__DIR__ . '/../../../') . '\public\json\profile';
+        $folderPath = base_path('public/json/profile');
 
         // get all file JSON in directory
         $jsonFiles = glob($folderPath . '/*.json');
@@ -726,7 +726,7 @@ class ProfileController extends Controller
     public function article_store(Request $request, $id)
     {
         // get data profile from json file
-        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+        $folderPathPro = base_path('public/json/profile');
 
         // get file json
         $jsonFilePro = glob($folderPathPro . $id . '.json');
@@ -785,7 +785,7 @@ class ProfileController extends Controller
     public function article_update(Request $request, $id)
     {
         // get data profile from json file
-        $folderPathPro = realpath(__DIR__ . '/../../../') . '/public/json/profile/';
+        $folderPathPro = base_path('public/json/profile');
 
         // get file json
         $jsonFilePro = glob($folderPathPro . $id . '.json');
