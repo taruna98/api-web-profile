@@ -1,5 +1,5 @@
 <?php
-$uploadDirectory = 'C:\xampp\htdocs\web_profile_v1\assets\img\/'; // replace with your desired destination folder on Server B
+$uploadDirectory = '/var/www/applications/web_profile_v1/assets/img/'; // replace with your desired destination folder on Server B
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['portfolio_file_1']) && $_FILES['portfolio_file_1']['error'] === UPLOAD_ERR_OK) {
