@@ -97,6 +97,7 @@ class ProfileController extends Controller
         $decodedDataPro['profile']['nme']  = $profile->nme;
         $decodedDataPro['profile']['stt']  = $profile->stt;
         $decodedDataPro['profile']['scv']  = $status_profile_cv;
+        $decodedDataPro['profile']['lnk']  = env('WEB_PROFILE_URL') . '?proid/' . $id;
         $profile = $decodedDataPro;
 
         $dataload = $profile;
