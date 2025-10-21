@@ -14,7 +14,8 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'API Web Portfolio V1';
+    // return $router->app->version();
 });
 
 // // auth
